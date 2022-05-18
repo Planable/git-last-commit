@@ -7,9 +7,10 @@ var git = require('../source/index.js');
 describe('feature: git-last-commit to return last commit info', function() {
 
 	it.only('should', () => {
-		git.getLastCommit(function(err,commit) {
-			console.log(commit)
-		},{},2)
+		git.getLastCommit(function(err,response) {
+			console.log(response)
+			// console.log(JSON.stringify(response));
+		},{},5)
 	})
 	it('should parse git commands fully when command is really executed', function(done) {
 		git.getLastCommit(function(err, commit) {

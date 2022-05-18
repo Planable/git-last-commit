@@ -39,13 +39,10 @@ const getLastCommit = (callback, options,number) => {
       return
     }
     const commits = res.split(splitCommit).filter((commit) => commit !== '')
+    let output = []
     commits.forEach((commit) => {
-
-    
     var a = commit.split(splitCharacter)
-
-
-    callback(null, {
+    output.push({
       shortHash: a[0],
       hash: a[1],
       subject: a[2],
@@ -64,6 +61,8 @@ const getLastCommit = (callback, options,number) => {
       notes: a[11],
       })
     })
+
+    callback(null, output)
   })
 }
 
