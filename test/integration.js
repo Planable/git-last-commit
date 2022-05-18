@@ -5,6 +5,12 @@ var expect = require('chai').expect;
 var git = require('../source/index.js');
 
 describe('feature: git-last-commit to return last commit info', function() {
+
+	it.only('should', () => {
+		git.getLastCommit(function(err,commit) {
+			console.log(commit)
+		},{},2)
+	})
 	it('should parse git commands fully when command is really executed', function(done) {
 		git.getLastCommit(function(err, commit) {
 			expect(err).to.be.null;

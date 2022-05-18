@@ -1,5 +1,7 @@
 const process = require('child_process'),
-  splitCharacter = '<##>'
+  splitCharacter = '<##>',
+  splitCommit = '|||'
+
 
 const executeCommand = (command, options, callback) => {
   let dst = __dirname
@@ -23,28 +25,25 @@ const executeCommand = (command, options, callback) => {
   })
 }
 
-const prettyFormat = ["%h", "%H", "%s", "%f", "%b", "%at", "%ct", "%an", "%ae", "%cn", "%ce", "%N", ""]
+const prettyFormat = ["%h", "%H", "%s", "%f", "%b", "%at", "%ct", "%an", "%ae", "%cn", "%ce", "%N"]
 
-const getCommandString = splitCharacter =>
-  'git log -1 --pretty=format:"' + prettyFormat.join(splitCharacter) +'"' +
-    ' && git rev-parse --abbrev-ref HEAD' +
-    ' && git tag --contains HEAD'
+const getCommandString = (splitCharacter,nr) =>
+  `git log -${nr} --pretty=format:"` + prettyFormat.join(splitCharacter) + splitCommit + '"'
 
-const getLastCommit = (callback, options) => {
-  const command = getCommandString(splitCharacter)
+const getLastCommit = (callback, options,number) => {
+  const command = getCommandString(splitCharacter,number)
 
   executeCommand(command, options, function(err, res) {
     if (err) {
       callback(err)
       return
     }
+    const commits = res.split(splitCommit).filter((commit) => commit !== '')
+    commits.forEach((commit) => {
 
-    var a = res.split(splitCharacter)
+    
+    var a = commit.split(splitCharacter)
 
-    // e.g. master\n or master\nv1.1\n or master\nv1.1\nv1.2\n
-    var branchAndTags = a[a.length-1].split('\n').filter(n => n)
-    var branch = branchAndTags[0]
-    var tags = branchAndTags.slice(1)
 
     callback(null, {
       shortHash: a[0],
@@ -63,8 +62,7 @@ const getLastCommit = (callback, options) => {
         email: a[10]
       },
       notes: a[11],
-      branch,
-      tags
+      })
     })
   })
 }
