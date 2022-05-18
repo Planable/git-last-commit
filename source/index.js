@@ -25,7 +25,7 @@ const executeCommand = (command, options, callback) => {
   })
 }
 
-const prettyFormat = ["%h", "%H", "%s", "%f", "%b", "%at", "%ct", "%an", "%ae", "%cn", "%ce", "%N"]
+const prettyFormat = ["%h", "%H", "%s", "%f", "%b", "%at", "%ct", "%an", "%ae", "%cn", "%ce", "%N", "%D"]
 
 const getCommandString = (splitCharacter,nr) =>
   `git log -${nr} --pretty=format:"` + prettyFormat.join(splitCharacter) + splitCommit + '"'
@@ -38,6 +38,7 @@ const getLastCommit = (callback, options,number) => {
       callback(err)
       return
     }
+    console.log(res)
     const commits = res.split(splitCommit).filter((commit) => commit !== '')
     let output = []
     commits.forEach((commit) => {
@@ -59,6 +60,7 @@ const getLastCommit = (callback, options,number) => {
         email: a[10]
       },
       notes: a[11],
+      refs: a[12].split(', ')
       })
     })
 
