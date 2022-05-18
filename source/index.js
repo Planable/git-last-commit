@@ -38,7 +38,6 @@ const getLastCommit = (callback, options,number) => {
       callback(err)
       return
     }
-    console.log(res)
     const commits = res.split(splitCommit).filter((commit) => commit !== '')
     let output = []
     commits.forEach((commit) => {
